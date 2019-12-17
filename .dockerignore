@@ -1,9 +1,4 @@
-bookreviews/tests/
-bookreviews/documentation/
-flask-app.service
-Jenkinsfile
-SFIA Project.pptx
-README.md
-.gitignore
-.dockerignore
-Dockerfile
+*
+!bookreviews/application/
+!bookreviews/app.py
+!bookreviews/requirements.txt
