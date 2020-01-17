@@ -3,7 +3,7 @@
 
 	<br>
 	<div class="form">
-		<form method="POST" action="">
+		<form method="POST" action="" enctype="multipart/form-data">
 			{{ form.hidden_tag() }}
 			<div class="form-group">
 				{{ form.first_name.label }}
@@ -31,6 +31,20 @@
 					</div>
 				{% else %}
 					{{ form.last_name }}
+				{% endif %}
+			</div>
+			<br>
+			<div class="form-group">
+				{{ form.photo.label }}
+				{% if form.photo.errors %}
+					{{ form.photo }}
+					<div class="error">
+						{% for error in form.photo.errors %}
+							<span>{{ error }}</span>
+						{% endfor %}
+					</div>
+				{% else %}
+					{{ form.photo }}
 				{% endif %}
 			</div>
 			<br>

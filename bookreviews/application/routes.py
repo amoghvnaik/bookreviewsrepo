@@ -3,7 +3,9 @@ from flask_login import login_user, current_user, logout_user, login_required
 from application import app, db, bcrypt, login_manager
 from application.models import Reviews, Users
 from application.forms import ReviewsForm, LoginForm, RegisterForm, UpdateAccountForm
-
+from werkzeug.utils import secure_filename
+import boto3
+import os
 
 @app.route('/')
 @app.route('/home')
@@ -45,9 +47,18 @@ def register():
         user = Users(email=form.email.data, 
                 first_name=form.first_name.data,
                 last_name=form.last_name.data,
+                photo=form.photo.data.filename,
                 password=hashed_pw)
         db.session.add(user)
         db.session.commit()
+        f = form.photo.data
+        app.config["IMAGE_UPLOADS"] = "/tmp"
+        f.save(os.path.join(app.config["IMAGE_UPLOADS"], f.filename))
+        #return f
+        s3 = boto3.resource('s3')
+        #bucket = s3.Bucket('qpwoei-qpwoei')
+        #bucket.upload_file('tmp/f')
+        s3.meta.client.upload_file("/tmp/"+str(f.filename), 'qpwoei-qpwoei', "/tmp/"+str(f.filename))
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -111,7 +122,13 @@ def account():
         form.last_name.data = current_user.last_name
         form.email.data = current_user.email
     postData = Reviews.query.filter_by(user_id=current_user.id).all()
-    return render_template('account.html', title='Account', form=form, account=postData)
+    downloaded = Users.query.filter_by(id=current_user.id).first()
+    downloadedpic = downloaded.photo
+    #BUCKET_NAME = 'qpwoei-qpwoei'
+    #KEY = '/tmp/About.png'
+    #s3 = boto3.resource('s3')
+    #download = s3.Bucket(BUCKET_NAME).download_file(KEY, '/tmp/File.png')
+    return render_template('account.html', title='Account', form=form, downloadedpic=downloadedpic, account=postData)
 
 @app.route('/edit/<int:review_id>', methods =['GET', 'POST'])
 @login_required

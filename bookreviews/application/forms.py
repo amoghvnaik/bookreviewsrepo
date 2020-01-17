@@ -4,6 +4,7 @@ from wtforms import SubmitField, StringField, PasswordField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from application import app
 from application.models import Users
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
@@ -42,6 +43,9 @@ class RegisterForm(FlaskForm):
 
     last_name = StringField('Last name',
                 validators=[DataRequired(), Length(min=1, max=50)])
+
+    photo = FileField('Image', 
+             validators=[FileRequired(), FileAllowed(['jpg', 'png'], 'Images Only!')])
 
     email = StringField('Email',
             validators=[DataRequired(), Email(), Length(min=1, max=50)])
