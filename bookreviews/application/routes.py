@@ -36,7 +36,6 @@ def login():
 
     return render_template('login.html', title='Log In', form=form)
 
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -58,7 +57,9 @@ def register():
         s3 = boto3.resource('s3')
         #bucket = s3.Bucket('qpwoei-qpwoei')
         #bucket.upload_file('tmp/f')
-        s3.meta.client.upload_file("/tmp/"+str(f.filename), 'qpwoei-qpwoei', "/tmp/"+str(f.filename))
+        #bucket=s3.Bucket('qpwoei-qpwoei')
+        s3.meta.client.upload_fileobj(Fileobj=f, Bucket='qpwoei-qpwoei', Key="/tmp/"+str(f.filename))
+        #s3.meta.client.upload_file("/tmp/"+str(f.filename), 'qpwoei-qpwoei', "/tmp/"+str(f.filename))
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 

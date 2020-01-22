@@ -10,6 +10,10 @@ services:
     - MYSQL_IP=${MYSQL_IP}
     - MYSQL_DB=${MYSQL_DB}
     - MYSQL_KEY=${MYSQL_KEY}
+    - AWS_XRAY_TRACING_NAME=myapp
+    - AWS_XRAY_DAEMON_ADDRESS=x-ray:2000
+    - AWS_XRAY_DEBUG_MODE="true"
+
   nginx:
     image: nginx
     container_name: nginx
@@ -21,3 +25,9 @@ services:
     - type: bind
       source: ./nginx.conf
       target: /etc/nginx/nginx.conf
+
+  x-ray:
+    container_name: x-ray
+    image: amazon/aws-xray-daemon:latest
+    ports:
+    - "0:2000/udp"
