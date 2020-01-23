@@ -10,9 +10,7 @@ services:
     - MYSQL_IP=${MYSQL_IP}
     - MYSQL_DB=${MYSQL_DB}
     - MYSQL_KEY=${MYSQL_KEY}
-    - AWS_XRAY_TRACING_NAME=myapp
     - AWS_XRAY_DAEMON_ADDRESS=x-ray:2000
-    - AWS_XRAY_DEBUG_MODE="true"
 
   nginx:
     image: nginx

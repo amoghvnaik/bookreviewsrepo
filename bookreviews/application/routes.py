@@ -58,8 +58,9 @@ def register():
         #bucket = s3.Bucket('qpwoei-qpwoei')
         #bucket.upload_file('tmp/f')
         #bucket=s3.Bucket('qpwoei-qpwoei')
-        s3.meta.client.upload_fileobj(Fileobj=f, Bucket='qpwoei-qpwoei', Key="/tmp/"+str(f.filename))
-        #s3.meta.client.upload_file("/tmp/"+str(f.filename), 'qpwoei-qpwoei', "/tmp/"+str(f.filename))
+        #bucket.put_object(Body=request.files['f'], Key="/tmp/"+str(f.filename))
+        s3.meta.client.upload_file("/tmp/"+str(f.filename), 'qpwoei-qpwoei', "/tmp/"+str(f.filename))
+        os.remove("/tmp/"+str(f.filename))
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
